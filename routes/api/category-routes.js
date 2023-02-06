@@ -54,8 +54,10 @@ router.put('/:id', async (req, res) => {
       where: {
         id: req.params.id
       }
-    });
-    res.status(200).json(`Updated category name to ${req.body.category_name}`);
+    })
+      .then((category) => {
+        res.status(200).json(category);
+      });
   } catch (err) {
     res.status(400).json(err);
   }
@@ -68,8 +70,10 @@ router.delete('/:id', async (req, res) => {
       where: {
         id: req.params.id
       }
-    });
-    res.status(200).json(`Deleted category by id: ${req.params.id}`);
+    })
+      .then((category) => {
+        res.status(200).json(category);
+      });
   } catch (err) {
     res.status(400).json(err);
   }

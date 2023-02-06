@@ -33,6 +33,11 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   // create a new tag
+  /* req.body should look like this:
+    {
+      tag_name: "sports"
+    }
+  */
   try {
     await Tag.create(req.body)
       .then((tag) => {

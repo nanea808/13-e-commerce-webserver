@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const dbProducts = await Product.findAll({
-      include: [{ model: Category}],
+      include: [{ model: Category }],
       attributes: { exclude: ['category_id'] }
     });
     res.status(200).json(dbProducts);
@@ -30,11 +30,11 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(dbProduct);
   } catch (err) {
     res.status(500).json(err);
-  } 
+  }
 });
 
 // create new product
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   /* req.body should look like this...
     {
       product_name: "Basketball",
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-  Product.create(req.body)
+  await Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
@@ -114,7 +114,10 @@ router.delete('/:id', async (req, res) => {
       where: {
         id: req.params.id
       }
-    });
+    })
+      .then((product) => {
+        res.status(200).json(product);
+      });
     res.status(200).json(`Deleted product by id: ${req.params.id}!`)
   } catch (err) {
     res.status(400).json(err);
